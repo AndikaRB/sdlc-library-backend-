@@ -13,6 +13,7 @@ const cartController = {
 
         const findBookInCart = await Cart.findOne({
             where: {
+                UserId: req.user.id,
                 BookId: BookId
             }
         })
@@ -22,6 +23,7 @@ const cartController = {
                 message: "You already add this book to your cart",
             })
         }
+
         const addBookToCart = await Cart.create({
             UserId: req.user.id,
             BookId: BookId
@@ -64,7 +66,7 @@ const cartController = {
                 }
             })
 
-            console.log(seeAllCartItems)
+            // console.log(seeAllCartItems)
 
             return res.status(200).json({
                 message: "showMyItemCart",
@@ -162,6 +164,8 @@ const cartController = {
                 })
             )
 
+            // console.log(createTransactionItems)
+
             const findTransactionById = await db.Transaction.findOne({
                 where: {
                     UserId: req.user.id
@@ -193,13 +197,14 @@ const cartController = {
             })
             // const invoiceDate = moment().format("DD MMMM YYYY")
 
-            cron.schedule('0 */5 * * * *', () => {
+            cron.schedule('0 */1 * * * *', () => {
                 if (createTransaction.loan_status === "Waiting for return") {
 
                     db.Transaction.update(
                         {
                             is_penalty,
                             total_penalty,
+                            loan_status: "You got penalty"
                         },
                         {
                             where: {
@@ -231,7 +236,7 @@ const cartController = {
                 where: {
                     UserId: req.user.id,
                 },
-            });
+            })
 
             return res.status(200).json({
                 message: "cart checked out"

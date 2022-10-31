@@ -1,6 +1,6 @@
 const db = require("../models")
 const { Transaction } = db
-// const moment = require("moment")
+const moment = require("moment")
 // const emailService = require('../lib/email-service')
 
 const transactionController = {
@@ -28,6 +28,11 @@ const transactionController = {
                 },
                 order: [
                     ["borrow_date", "DESC"]
+                    // ["loan_status", "ASC"]
+                ],
+                order: [
+                    // ["borrow_date", "DESC"]
+                    ["loan_status", "DESC"]
                 ],
                 include: [
                     { model: db.TransactionItem, include: [{ model: db.Book }] }
@@ -37,6 +42,22 @@ const transactionController = {
             return res.status(200).json({
                 message: "Show All Transaction",
                 data: seeMyTransactionList
+            })
+
+        } catch (err) {
+            console.log(err)
+            return res.status(500).json({
+                message: "Server error"
+            })
+        }
+    },
+    showAllTrasanctionItems: async (req, res) => {
+        try {
+            const seeAllTransactionItemList = await db.TransactionItem.findAll()
+
+            return res.status(200).json({
+                message: "Show All Transaction",
+                data: seeAllTransactionItemList
             })
 
         } catch (err) {
@@ -67,13 +88,15 @@ const transactionController = {
             let mn = today.getMinutes()
             let sc = today.getSeconds()
 
-            const return_date = yyyy + '-' + mm + '-' + dd + ' ' + (hr - 5) + ':' + mn + ':' + sc;
+            // const return_date = yyyy + '-' + mm + '-' + dd + ' ' + (hr - 5) + ':' + mn + ':' + sc;
+
+            const return_date = moment().format("YYYY-MM-DD hh:mm:ss")
 
             const is_penalty = "false"
 
             const total_penalty = 0
 
-            if (loan_status === "Loan returned") {
+            if (loan_status === "Loan returned" || loan_status === "You got penalty") {
                 await Transaction.update(
                     {
                         loan_status,

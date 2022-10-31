@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             TransactionItem.belongsTo(models.Transaction)
             TransactionItem.belongsTo(models.Book)
-            TransactionItem.belongsTo(models.Cart)
+            // TransactionItem.belongsTo(models.Cart)
         }
     }
     TransactionItem.init(

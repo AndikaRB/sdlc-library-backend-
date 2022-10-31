@@ -4,5 +4,6 @@ const router = express.Router()
 
 router.get("/", bookController.getAllBooks)
 router.get("/:id", bookController.getBookDetailsByid)
+// router.get("/category", bookController.getBookByCategoryId)
 
 module.exports = router

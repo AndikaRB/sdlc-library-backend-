@@ -9,8 +9,9 @@ const bookRoute = require("./routes/bookRoute")
 const cartRoute = require("./routes/cartRoute")
 const transactionRoute = require("./routes/transactionRoute")
 const adminRoute = require("./routes/adminRoute")
+const categoriesRoute = require("./routes/categoriesRoute")
 const { verifyToken } = require('./middlewares/authMiddleware')
-
+const testRoute = require("./routes/testRoute")
 
 dotenv.config()
 
@@ -27,6 +28,8 @@ app.use("/books", bookRoute)
 app.use("/carts", verifyToken, cartRoute)
 app.use("/transactions", verifyToken, transactionRoute)
 app.use("/admin", adminRoute)
+app.use("/categories", categoriesRoute)
+app.use("/test", testRoute)
 
 app.listen(PORT, async () => {
     db.sequelize.sync({ alter: true })
